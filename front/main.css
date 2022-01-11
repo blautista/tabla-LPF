@@ -1,0 +1,38 @@
+table {
+  margin: auto;
+  max-width:1200px; 
+  table-layout: auto;
+  width: calc(100% - 16px);
+  border-radius: 20px;
+  border-spacing:0;
+  border:1px solid lightgray;
+  table-layout: auto;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;  
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  overflow-x: scroll;
+}
+
+td {
+  padding:8px;
+  text-align: start;
+  overflow-wrap:break-word;
+  word-break: break-all;
+  hyphens:auto; 
+}
+tr {
+  background: white;
+  height: 20px;
+  border-bottom:1px solid lightgray;
+}
+
+tr:hover {
+  background:#eee;
+}
+
+tr:nth-child(even) {
+  background:rgb(247, 247, 247);
+}
+
+.clickable {
+  cursor: pointer; 
+}
