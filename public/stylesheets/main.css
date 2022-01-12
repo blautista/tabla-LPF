@@ -1,30 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Roboto:wght@100;300;400;700&display=swap');
 
 :root {
-
+  --header-color: purple;
+  --relegation-color: lightpink;
+  --cup-color: lightcyan; 
 }
 
 * {
+  box-sizing: border-box;
   margin:0;
   padding:0;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
+  font-size:1rem;
+  max-width:1200px; 
+  margin:auto;
 }
 
 table {
   margin: auto;
-  max-width:1200px; 
   table-layout: auto;
-  width: calc(100% - 16px);
-  border-radius: 20px;
+  width:100%;
   border-spacing:0;
-  border:1px solid lightgray;
   table-layout: auto;
   box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;  
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  overflow-x: scroll;
+}
+
+.table-title-container {
+  height:100px;
+  width:100%;
+  background:var(--header-color);
+  display:flex;
+  color:white;
+  justify-content: center;
+  align-items: center;
+}
+
+tr {
+  background: white;
+  height: 20px;
+  border-bottom:1px solid lightgray;
 }
 
 th {
@@ -33,13 +51,14 @@ th {
   color:white;
 }
 
+
 td {
   padding:8px;
   overflow-wrap:break-word;
   text-align: center;
   word-break: break-all;
   hyphens:auto; 
-  height:40px;
+  height:30px;
 }
 
 td:nth-child(2) {
@@ -47,11 +66,10 @@ td:nth-child(2) {
   font-weight: bold;
 }
 
-tr {
-  background: white;
-  height: 20px;
-  border-bottom:1px solid lightgray;
+td:nth-last-child(1) {
+  font-weight: bold;
 }
+
 
 tr:hover {
   background:#eee;
@@ -63,16 +81,23 @@ tr:nth-child(even) {
 
 
 tr:nth-child(-n+4) {
-  background:lightblue;
+  background:var(--cup-color);
 }
 
 tr:nth-last-child(-n+4) {
-  background:lightcoral;
+  background:var(--relegation-color);
+}
+
+span {
+  padding-left:4px;
 }
 
 @media screen and (max-width: 768px) {
   /* POS Equipo PJ G E P GF GC DG PTS */
   /*  1     2    3 4 5 6  7  8 9   10 */
+  table td {
+    font-size: .7rem;
+  }
   table td:nth-child(1) {
     display:none;
   }
@@ -100,4 +125,9 @@ tr:nth-last-child(-n+4) {
   /* table th:nth-child(3) {
     display:none;
   } */
+}
+
+.align-center {
+  display:flex;
+  align-items: center;
 }
