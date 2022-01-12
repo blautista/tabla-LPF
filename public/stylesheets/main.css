@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Roboto:wght@100;300;400;700&display=swap');
 
 :root {
-  --header-color: purple;
-  --relegation-color: lightpink;
+  --header-color: rgb(73, 64, 187);
+  --table-header-color: rgb(34, 0, 128);
+  --relegation-color: rgb(252, 213, 219);
   --cup-color: lightcyan; 
 }
 
@@ -13,9 +14,10 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size:1rem;
   max-width:1200px; 
+  color:#444;
   margin:auto;
 }
 
@@ -36,7 +38,7 @@ table {
   width:100%;
   background:var(--header-color);
   display:flex;
-  color:white;
+  color:#ddd;
   justify-content: center;
   align-items: center;
 }
@@ -49,8 +51,10 @@ tr {
 
 th {
   height:60px;
-  background:darkblue;
+  background:var(--table-header-color);
   color:white;
+  font-size:1.2rem;
+  font-weight: lighter;
 }
 
 
@@ -60,7 +64,8 @@ td {
   text-align: center;
   word-break: break-all;
   hyphens:auto; 
-  height:30px;
+  height:40px;
+  border-bottom: 1px solid #eee;
 }
 
 td:nth-child(2) {
