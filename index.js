@@ -27,8 +27,10 @@ app.get("/", async (req, res) => {
   try {
     const data = await getLatestDatabaseData();
     const standings = data.standings;
-    console.log(data);
-    res.render("index", { tableData: standings, fetchingInterval: process.env.FETCHING_INTERVAL });
+    res.render("index", {
+      tableData: standings,
+      fetchingInterval: process.env.FETCHING_INTERVAL,
+    });
   } catch (error) {
     res.render("error", { message: error });
   }
@@ -38,7 +40,8 @@ app.listen(process.env.PORT, () => {
   console.log("listening...");
 });
 
-const scrapingJob = schedule.scheduleJob( //funcion recurrente cada FETCHING_INTERVAL minutos 
+const scrapingJob = schedule.scheduleJob(
+  //funcion recurrente cada FETCHING_INTERVAL minutos
   `*/${process.env.FETCHING_INTERVAL} * * * *`,
   async () => {
     console.log("Trying to scrape....");
@@ -51,7 +54,8 @@ const scrapingJob = schedule.scheduleJob( //funcion recurrente cada FETCHING_INT
   }
 );
 
-const getLatestDatabaseData = async () => { //obtiene informacion de la db
+const getLatestDatabaseData = async () => {
+  //obtiene informacion de la db
   const client = await MongoClient.connect(
     `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.gpmz6.mongodb.net/standings?retryWrites=true&w=majority`
   );
@@ -62,12 +66,12 @@ const getLatestDatabaseData = async () => { //obtiene informacion de la db
     .limit(1)
     .sort({ $natural: -1 })
     .toArray();
-  console.log(data[0]);
   client.close();
   return data[0];
 };
 
-const saveSiteDataOnDatabase = async () => { //guarda la informacion obtenida del scraping en la db 
+const saveSiteDataOnDatabase = async () => {
+  //guarda la informacion obtenida del scraping en la db
   try {
     const data = await scrapeSiteData();
     const client = await MongoClient.connect(
@@ -85,19 +89,21 @@ const saveSiteDataOnDatabase = async () => { //guarda la informacion obtenida de
   }
 };
 
-const scrapeSiteData = async () => { //retorna la informacion de la tabla externa
+const scrapeSiteData = async () => {
+  //retorna la informacion de la tabla externa
   try {
     const res = await axios.get(
       "https://www.futbolargentino.com/primera-division/tabla-de-posiciones"
     );
 
     let dataArray = [];
-    
+
     const $ = cheerio.load(res.data);
     const table = $("tbody");
 
-    table.children("tr").each((itr, tr) => { //loopea por cada fila de la tabla
-      let rowObject = {}; 
+    table.children("tr").each((itr, tr) => {
+      //loopea por cada fila de la tabla
+      let rowObject = {};
       rowObject.POS = $(tr).children("td").eq(0).text().replace(/\s\s+/g, "");
       rowObject.IMG = $(tr)
         .children("td")
@@ -106,7 +112,7 @@ const scrapeSiteData = async () => { //retorna la informacion de la tabla extern
         .eq(0)
         .children("img")
         .eq(0)
-        .attr('data-src');
+        .attr("data-src");
       rowObject.NOMBRE = $(tr)
         .children("td")
         .eq(1)
@@ -125,7 +131,6 @@ const scrapeSiteData = async () => { //retorna la informacion de la tabla extern
       rowObject.PTS = $(tr).children("td").eq(9).text().replace(/\s\s+/g, "");
       dataArray.push({ ...rowObject });
     });
-    console.log(dataArray);
     return dataArray;
   } catch (error) {
     console.log(error);
