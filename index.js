@@ -16,6 +16,7 @@ app.engine(
 app.set("views", __dirname + "/views");
 app.set("view engine", "hbs");
 //pos equipo pj g e p gf gc dg pts
+app.use(express.static(__dirname + '/public'));
 
 app.get("/", async (req, res) => {
   const data = await getSiteData();
