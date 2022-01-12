@@ -23,11 +23,14 @@ app.set("view engine", "hbs");
 app.use(express.static(__dirname + "/public"));
 
 app.get("/", async (req, res) => {
-  const data = await getLatestDatabaseData();
-  const standings = data.standings;
-  console.log(data);
-  res.render("index", { tableData: standings });
-  console.log("rendered");
+  try {
+    const data = await getLatestDatabaseData();
+    const standings = data.standings;
+    console.log(data);
+    res.render("index", { tableData: standings });
+  } catch (error) {
+    res.render("error", { message: error });
+  }
 });
 
 app.listen(process.env.PORT, () => {
