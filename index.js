@@ -34,15 +34,18 @@ app.listen(process.env.PORT, () => {
   console.log("listening...");
 });
 
-const scrapingJob = schedule.scheduleJob(`*/${process.env.FETCHING_INTERVAL} * * * *`, async () => {
-  console.log("Trying to scrape....");
-  try {
-    const res = await saveSiteDataOnDatabase();
-    console.log("Successfully fetched data");
-  } catch (error) {
-    console.log(error);
+const scrapingJob = schedule.scheduleJob(
+  `*/${process.env.FETCHING_INTERVAL} * * * * *`,
+  async () => {
+    console.log("Trying to scrape....");
+    try {
+      const res = await saveSiteDataOnDatabase();
+      console.log("Successfully fetched data");
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 const getLatestDatabaseData = async () => {
   const client = await MongoClient.connect(
@@ -50,7 +53,11 @@ const getLatestDatabaseData = async () => {
   );
   const db = client.db();
   const standingsCollection = db.collection("standings");
-  const data = await standingsCollection.find().limit(1).sort({ $natural: -1 }).toArray();
+  const data = await standingsCollection
+    .find()
+    .limit(1)
+    .sort({ $natural: -1 })
+    .toArray();
   console.log(data[0]);
   client.close();
   return data[0];
@@ -84,16 +91,27 @@ const scrapeSiteData = async () => {
 
     const table = $("tbody");
     table.children("tr").each((itr, tr) => {
-      let rowArray = [];
-      $(tr)
-        .children()
-        .each((itd, td) => {
-          rowArray.push($(td).text().replace(/\s\s+/g, ""));
-          // console.log($(td).text().replace(/\s\s+/g, ''));
-        });
-      dataArray.push(rowArray);
+      let rowObject = {};
+      rowObject.POS = $(tr).children("td").eq(0).text().replace(/\s\s+/g, "");
+      rowObject.NOMBRE = $(tr)
+        .children("td")
+        .eq(1)
+        .children("a")
+        .children("span")
+        .eq(0)
+        .text()
+        .replace(/\s\s+/g, "");
+      rowObject.PJ = $(tr).children("td").eq(2).text().replace(/\s\s+/g, "");
+      rowObject.G = $(tr).children("td").eq(3).text().replace(/\s\s+/g, "");
+      rowObject.E = $(tr).children("td").eq(4).text().replace(/\s\s+/g, "");
+      rowObject.P = $(tr).children("td").eq(5).text().replace(/\s\s+/g, "");
+      rowObject.GF = $(tr).children("td").eq(6).text().replace(/\s\s+/g, "");
+      rowObject.GC = $(tr).children("td").eq(7).text().replace(/\s\s+/g, "");
+      rowObject.DG = $(tr).children("td").eq(8).text().replace(/\s\s+/g, "");
+      rowObject.PTS = $(tr).children("td").eq(9).text().replace(/\s\s+/g, "");
+      dataArray.push({...rowObject});
     });
-
+    console.log(dataArray);
     return dataArray;
   } catch (error) {
     console.log(error);
