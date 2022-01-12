@@ -17,9 +17,10 @@ app.engine(
     layoutsDir: __dirname + "/views/layouts",
   })
 );
+
 app.set("views", __dirname + "/views");
 app.set("view engine", "hbs");
-//pos equipo pj g e p gf gc dg pts
+
 app.use(express.static(__dirname + "/public"));
 
 app.get("/", async (req, res) => {
@@ -37,20 +38,20 @@ app.listen(process.env.PORT, () => {
   console.log("listening...");
 });
 
-const scrapingJob = schedule.scheduleJob(
-  `*/${process.env.FETCHING_INTERVAL} * * * * *`,
+const scrapingJob = schedule.scheduleJob( //funcion recurrente cada FETCHING_INTERVAL minutos 
+  `*/${process.env.FETCHING_INTERVAL} * * * *`,
   async () => {
     console.log("Trying to scrape....");
     try {
       const res = await saveSiteDataOnDatabase();
       console.log("Successfully fetched data");
     } catch (error) {
-      console.log(error);
+      console.log("There was an error scraping the data: " + error);
     }
   }
 );
 
-const getLatestDatabaseData = async () => {
+const getLatestDatabaseData = async () => { //obtiene informacion de la db
   const client = await MongoClient.connect(
     `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.gpmz6.mongodb.net/standings?retryWrites=true&w=majority`
   );
@@ -66,7 +67,7 @@ const getLatestDatabaseData = async () => {
   return data[0];
 };
 
-const saveSiteDataOnDatabase = async () => {
+const saveSiteDataOnDatabase = async () => { //guarda la informacion obtenida del scraping en la db 
   try {
     const data = await scrapeSiteData();
     const client = await MongoClient.connect(
@@ -84,17 +85,19 @@ const saveSiteDataOnDatabase = async () => {
   }
 };
 
-const scrapeSiteData = async () => {
+const scrapeSiteData = async () => { //retorna la informacion de la tabla externa
   try {
     const res = await axios.get(
       "https://www.futbolargentino.com/primera-division/tabla-de-posiciones"
     );
-    let dataArray = [];
-    const $ = cheerio.load(res.data);
 
+    let dataArray = [];
+    
+    const $ = cheerio.load(res.data);
     const table = $("tbody");
-    table.children("tr").each((itr, tr) => {
-      let rowObject = {};
+
+    table.children("tr").each((itr, tr) => { //loopea por cada fila de la tabla
+      let rowObject = {}; 
       rowObject.POS = $(tr).children("td").eq(0).text().replace(/\s\s+/g, "");
       rowObject.IMG = $(tr)
         .children("td")
