@@ -1,10 +1,12 @@
 const cheerio = require("cheerio");
 const express = require("express");
 const axios = require("axios");
-const request = require("request");
 
-const app = express();
+const hbs = require('express-handlebars');
+const app = express();  
 
+app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname}))
+app.set('view engine', 'hbs')
 //pos equipo pj g e p gf gc dg pts
 
 const getSiteData = async () => {
@@ -34,7 +36,7 @@ const getSiteData = async () => {
   }
 };
 
-app.get("/posiciones", async (req, res) => {
+app.get("/", async (req, res) => {
   const data = await getSiteData();
   console.log(data);
   // res.send(JSON.stringify(data));
