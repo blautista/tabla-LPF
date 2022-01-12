@@ -25,6 +25,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("/", async (req, res) => {
   try {
+    
     const data = await getLatestDatabaseData();
     const standings = data.standings;
     res.render("index", {

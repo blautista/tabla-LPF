@@ -1,8 +1,11 @@
 {
   "name": "challenge",
   "version": "1.0.0",
-  "description": "",
+  "description": "Scraping app about football",
   "main": "index.js",
+  "engines": {
+    "node": "14.17.6"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./index.js"
