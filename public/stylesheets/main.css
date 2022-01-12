@@ -30,7 +30,9 @@ table {
 }
 
 .table-title-container {
+  margin-top:40px;
   height:100px;
+  border-radius: 20px 20px 0px 0px;
   width:100%;
   background:var(--header-color);
   display:flex;
@@ -125,6 +127,10 @@ span {
   /* table th:nth-child(3) {
     display:none;
   } */
+}
+
+footer {
+  height:40px;
 }
 
 .align-center {

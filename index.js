@@ -28,7 +28,7 @@ app.get("/", async (req, res) => {
     const data = await getLatestDatabaseData();
     const standings = data.standings;
     console.log(data);
-    res.render("index", { tableData: standings });
+    res.render("index", { tableData: standings, fetchingInterval: process.env.FETCHING_INTERVAL });
   } catch (error) {
     res.render("error", { message: error });
   }
