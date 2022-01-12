@@ -96,6 +96,14 @@ const scrapeSiteData = async () => {
     table.children("tr").each((itr, tr) => {
       let rowObject = {};
       rowObject.POS = $(tr).children("td").eq(0).text().replace(/\s\s+/g, "");
+      rowObject.IMG = $(tr)
+        .children("td")
+        .eq(1)
+        .children("a")
+        .eq(0)
+        .children("img")
+        .eq(0)
+        .attr('data-src');
       rowObject.NOMBRE = $(tr)
         .children("td")
         .eq(1)
@@ -112,7 +120,7 @@ const scrapeSiteData = async () => {
       rowObject.GC = $(tr).children("td").eq(7).text().replace(/\s\s+/g, "");
       rowObject.DG = $(tr).children("td").eq(8).text().replace(/\s\s+/g, "");
       rowObject.PTS = $(tr).children("td").eq(9).text().replace(/\s\s+/g, "");
-      dataArray.push({...rowObject});
+      dataArray.push({ ...rowObject });
     });
     console.log(dataArray);
     return dataArray;
