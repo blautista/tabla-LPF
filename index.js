@@ -2,12 +2,30 @@ const cheerio = require("cheerio");
 const express = require("express");
 const axios = require("axios");
 
-const hbs = require('express-handlebars');
-const app = express();  
+const hbs = require("express-handlebars");
+const app = express();
 
-app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname}))
-app.set('view engine', 'hbs')
+app.engine(
+  "hbs",
+  hbs.engine({
+    extname: "hbs",
+    defaultLayout: "layout",
+    layoutsDir: __dirname + "/views/layouts",
+  })
+);
+app.set("views", __dirname + "/views");
+app.set("view engine", "hbs");
 //pos equipo pj g e p gf gc dg pts
+
+app.get("/", async (req, res) => {
+  const data = await getSiteData();
+  res.render("index", { tableData: data });
+  console.log('rendered');
+});
+
+app.listen(3000, () => {
+  console.log("listening...");
+});
 
 const getSiteData = async () => {
   try {
@@ -28,23 +46,10 @@ const getSiteData = async () => {
         });
       dataArray.push(rowArray);
     });
-    
+
     return dataArray;
   } catch (error) {
     console.log(error);
     return error;
   }
 };
-
-app.get("/", async (req, res) => {
-  const data = await getSiteData();
-  console.log(data);
-  // res.send(JSON.stringify(data));
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Type', 'application/json');
-  res.status(200).send(JSON.stringify(data));
-});
-
-app.listen(3000, () => {
-  console.log("listening...");
-});

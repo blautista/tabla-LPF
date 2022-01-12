@@ -1,0 +1,26 @@
+<table id="posiciones">
+  <thead>
+    <th>POS</th>
+    <th>Equipo</th>
+    <th>PJ</th>
+    <th>G</th>
+    <th>E</th>
+    <th>P</th>
+    <th>GF</th>
+    <th>GC</th>
+    <th>DG</th>
+    <th>PTS</th>
+  </thead>
+  <tbody>
+    {{#each tableData}}
+      <tr>
+      {{#each this}}
+        <td>{{this}}</td>
+      {{/each}}
+      </tr>
+    {{/each}}
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>
