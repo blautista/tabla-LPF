@@ -1,5 +1,7 @@
 const cheerio = require("cheerio");
 const express = require("express");
+const { MongoClient } = require('mongodb');
+require('dotenv').config();
 const axios = require("axios");
 
 const hbs = require("express-handlebars");
@@ -24,9 +26,27 @@ app.get("/", async (req, res) => {
   console.log('rendered');
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("listening...");
 });
+
+const getLatestDatabaseData = async () => {
+  const client = await MongoClient.connect(`mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0.gpmz6.mongodb.net/standings?retryWrites=true&w=majority`);
+  const db = client.db();
+  const standingsCollection = db.collection('standings');
+  const data = standingsCollection.find().limit(1).sort({$natural:-1})
+  client.close();
+  return data;
+}
+
+const saveSiteDataOnDatabase = async () => {
+  const data = await getSiteData();
+  const client = await MongoClient.connect(`mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0.gpmz6.mongodb.net/standings?retryWrites=true&w=majority`);
+  const db = client.db();
+  const standingsCollection = db.collection('standings');
+  client.close();
+  standingsCollection.insertOne(data);
+}
 
 const getSiteData = async () => {
   try {
