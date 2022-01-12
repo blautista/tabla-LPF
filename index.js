@@ -1,11 +1,12 @@
 const cheerio = require("cheerio");
 const schedule = require("node-schedule");
 const express = require("express");
+const axios = require("axios");
+const hbs = require("express-handlebars");
+
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
-const axios = require("axios");
 
-const hbs = require("express-handlebars");
 const app = express();
 
 app.engine(
@@ -33,7 +34,7 @@ app.listen(process.env.PORT, () => {
   console.log("listening...");
 });
 
-const scrapingJob = schedule.scheduleJob("*/1 * * * *", async () => {
+const scrapingJob = schedule.scheduleJob(`*/${process.env.FETCHING_INTERVAL} * * * *`, async () => {
   console.log("Trying to scrape....");
   try {
     const res = await saveSiteDataOnDatabase();
@@ -57,7 +58,7 @@ const getLatestDatabaseData = async () => {
 
 const saveSiteDataOnDatabase = async () => {
   try {
-    const data = await getSiteData();
+    const data = await scrapeSiteData();
     const client = await MongoClient.connect(
       `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.gpmz6.mongodb.net/standings?retryWrites=true&w=majority`
     );
@@ -73,7 +74,7 @@ const saveSiteDataOnDatabase = async () => {
   }
 };
 
-const getSiteData = async () => {
+const scrapeSiteData = async () => {
   try {
     const res = await axios.get(
       "https://www.futbolargentino.com/primera-division/tabla-de-posiciones"
