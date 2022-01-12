@@ -32,8 +32,7 @@ table {
 }
 
 .table-title-container {
-  height:100px;
-  border-radius: 20px 20px 0px 0px;
+  height:100px; 
   width:100%;
   background:var(--header-color);
   display:flex;
@@ -53,6 +52,7 @@ th {
   background:var(--table-header-color);
   color:white;
   font-size:1.2rem;
+  min-width:30px;
   font-weight: lighter;
 }
 
@@ -63,6 +63,7 @@ td {
   text-align: center;
   word-break: break-all;
   hyphens:auto; 
+  min-width:30px;
   height:40px;
   border-bottom: 1px solid #eee;
 }
@@ -102,7 +103,7 @@ span {
   /* POS Equipo PJ G E P GF GC DG PTS */
   /*  1     2    3 4 5 6  7  8 9   10 */
   table td {
-    font-size: .7rem;
+    font-size: max(12px, 2vw);
   }
   table td:nth-child(1) {
     display:none;
